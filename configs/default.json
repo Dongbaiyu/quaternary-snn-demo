@@ -1,0 +1,17 @@
+{
+  "time_steps": 4,
+  "batch_size": 64,
+  "num_epochs": 100,
+  "learning_rate": 0.003,
+  "weight_decay": 0.0005,
+  "tau": 0.875,
+  "device": "auto",
+  "checkpoint_path": "checkpoints/qsn_sresnet20_t4_best.pth",
+  "mode": "inference",
+  "default_checkpoint": "checkpoints/qsn_sresnet20_t4_best.pth",
+  "default_image_index": 143,
+  "demo_mode": "showcase",
+  "result_directory": "results",
+  "window_width": 1366,
+  "window_height": 768
+}

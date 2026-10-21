@@ -1,0 +1,66 @@
+{
+  "checkpoint": "checkpoints/qsn_sresnet20_t4_best.pth",
+  "verified_accuracy": 92.03,
+  "samples": [
+    {
+      "index": 143,
+      "true_label": "cat",
+      "expected_prediction": "cat",
+      "verified": true
+    },
+    {
+      "index": 108,
+      "true_label": "ship",
+      "expected_prediction": "ship",
+      "verified": true
+    },
+    {
+      "index": 520,
+      "true_label": "dog",
+      "expected_prediction": "dog",
+      "verified": true
+    },
+    {
+      "index": 647,
+      "true_label": "deer",
+      "expected_prediction": "deer",
+      "verified": true
+    },
+    {
+      "index": 554,
+      "true_label": "truck",
+      "expected_prediction": "truck",
+      "verified": true
+    },
+    {
+      "index": 886,
+      "true_label": "airplane",
+      "expected_prediction": "airplane",
+      "verified": true
+    },
+    {
+      "index": 848,
+      "true_label": "bird",
+      "expected_prediction": "bird",
+      "verified": true
+    },
+    {
+      "index": 653,
+      "true_label": "frog",
+      "expected_prediction": "frog",
+      "verified": true
+    },
+    {
+      "index": 6984,
+      "true_label": "automobile",
+      "expected_prediction": "automobile",
+      "verified": true
+    },
+    {
+      "index": 4354,
+      "true_label": "horse",
+      "expected_prediction": "horse",
+      "verified": true
+    }
+  ]
+}

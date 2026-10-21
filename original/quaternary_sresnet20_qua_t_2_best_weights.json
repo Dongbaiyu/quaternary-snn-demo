@@ -1,0 +1,22 @@
+{
+  "model": "SResNet20",
+  "spike_type": "quaternary",
+  "spike_values": [
+    -1,
+    0,
+    1,
+    2
+  ],
+  "time_steps": 2,
+  "tau": 0.875,
+  "dataset": "CIFAR-10",
+  "test_accuracy": 91.93,
+  "correct_count": 9193,
+  "test_count": 10000,
+  "epoch": 100,
+  "training_date": null,
+  "quantization": "FP32",
+  "source": "qua_timestep_2.py",
+  "checkpoint_sha256": "4f111d6222eab9b20d1795dc021d29c0bc4f5f46c45877389b80636755cba990",
+  "verified_confusion_matrix": "results/verified_models/confusion_matrix_t2_verified.png"
+}

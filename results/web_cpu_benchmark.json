@@ -1,0 +1,17 @@
+{
+  "python": "3.11.15",
+  "torch": "2.10.0+cu128",
+  "device": "CPU",
+  "checkpoint": "qsn_sresnet20_t4_best.pth",
+  "process_start_to_model_ready_seconds": 1.077702,
+  "model_load_seconds": 0.053617,
+  "first_request_wall_seconds": 0.033343,
+  "first_model_inference_seconds": 0.032622,
+  "warm_request_wall_mean_seconds": 0.047554,
+  "warm_model_inference_mean_seconds": 0.047099,
+  "rss_before_model_mb": 644.52,
+  "rss_model_ready_mb": 657.04,
+  "rss_peak_mb": 676.29,
+  "prediction": "cat",
+  "expected_prediction": "cat"
+}

@@ -1,0 +1,46 @@
+{
+  "image_index": 143,
+  "true_label": "cat",
+  "expected_prediction": "cat",
+  "verified": true,
+  "prediction_result": {
+    "predicted_class": "cat",
+    "top3_classes": [
+      {
+        "class_name": "cat",
+        "score": 0.984862744808197
+      },
+      {
+        "class_name": "truck",
+        "score": 0.0026442985981702805
+      },
+      {
+        "class_name": "automobile",
+        "score": 0.00198372732847929
+      }
+    ],
+    "class_scores": {
+      "airplane": 0.001974000595510006,
+      "automobile": 0.00198372732847929,
+      "bird": 0.001195200253278017,
+      "cat": 0.984862744808197,
+      "deer": 0.0011608602944761515,
+      "dog": 0.0014418929349631071,
+      "frog": 0.001397239393554628,
+      "horse": 0.0018278490751981735,
+      "ship": 0.001512161223217845,
+      "truck": 0.0026442985981702805
+    },
+    "time_steps": 4,
+    "inference_time": 0.23553491302300245,
+    "checkpoint_name": "qsn_sresnet20_t4_best.pth",
+    "model_name": "SResNet20",
+    "spike_type": "quaternary",
+    "spike_statistics": {
+      "-1": 882182,
+      "0": 289089,
+      "1": 184759,
+      "2": 151298
+    }
+  }
+}

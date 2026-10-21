@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+data/
+.venv/
+venv/
+env/
+*.log
+*.tmp
+.DS_Store
+results/inference_history.csv
+.streamlit/secrets.toml

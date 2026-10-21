@@ -1,0 +1,9 @@
+name: qsn-demo
+channels:
+  - defaults
+dependencies:
+  - python=3.11.15
+  - pip
+  - pip:
+      - --extra-index-url https://download.pytorch.org/whl/cu128
+      - -r requirements-lock.txt

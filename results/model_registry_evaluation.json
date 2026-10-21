@@ -1,0 +1,148 @@
+{
+  "models": [
+    {
+      "model": "SResNet20",
+      "spike_type": "quaternary",
+      "spike_values": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "time_steps": 1,
+      "tau": 0.875,
+      "dataset": "CIFAR-10",
+      "test_accuracy": 90.99,
+      "correct_count": 9099,
+      "test_count": 10000,
+      "epoch": 100,
+      "training_date": null,
+      "quantization": "FP32",
+      "source": "qua_timestep_1.py",
+      "checkpoint_sha256": "8f0d218c27fc1ca658d6b60e187b4a0f77570c29855c72723bc22585e338bb87",
+      "verified_confusion_matrix": "results/verified_models/confusion_matrix_t1_verified.png",
+      "checkpoint": "original/quaternary_sresnet20_qua_t_1_best_weights.pth",
+      "evaluation_seconds": 1.5831614659982733,
+      "strict_load": {
+        "missing_keys": [],
+        "unexpected_keys": []
+      },
+      "existing_confusion_matrix": {
+        "path": "original/confusion_matrix_qua_t_1.png",
+        "sha256": "b918262f0531cb5ffe3a327867bd39b37ed522fc4a69c3a078f06d150c4bd639",
+        "comparison": "source raster has no recoverable numeric matrix; regenerated from this evaluation's 10000 predictions"
+      },
+      "verified_confusion_matrix_sha256": "c2253ea76231ee929ec82fc4010314301011584d23a6ec4e330e233356e21cd1",
+      "previous_test_accuracy": null,
+      "accuracy_difference": null
+    },
+    {
+      "model": "SResNet20",
+      "spike_type": "quaternary",
+      "spike_values": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "time_steps": 2,
+      "tau": 0.875,
+      "dataset": "CIFAR-10",
+      "test_accuracy": 91.93,
+      "correct_count": 9193,
+      "test_count": 10000,
+      "epoch": 100,
+      "training_date": null,
+      "quantization": "FP32",
+      "source": "qua_timestep_2.py",
+      "checkpoint_sha256": "4f111d6222eab9b20d1795dc021d29c0bc4f5f46c45877389b80636755cba990",
+      "verified_confusion_matrix": "results/verified_models/confusion_matrix_t2_verified.png",
+      "checkpoint": "original/quaternary_sresnet20_qua_t_2_best_weights.pth",
+      "evaluation_seconds": 1.9139005970209837,
+      "strict_load": {
+        "missing_keys": [],
+        "unexpected_keys": []
+      },
+      "existing_confusion_matrix": {
+        "path": "original/confusion_matrix_qua_t_2.png",
+        "sha256": "b4174522ca02cfb9cda648632b5dc2bd3b14c807d7db92da3007a181164254a7",
+        "comparison": "source raster has no recoverable numeric matrix; regenerated from this evaluation's 10000 predictions"
+      },
+      "verified_confusion_matrix_sha256": "dbf53f7a93d4c66df71b4490d863ccb6548c45190eae63214cb16e57e074dd40",
+      "previous_test_accuracy": null,
+      "accuracy_difference": null
+    },
+    {
+      "model": "SResNet20",
+      "spike_type": "quaternary",
+      "spike_values": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "time_steps": 4,
+      "tau": 0.875,
+      "dataset": "CIFAR-10",
+      "test_accuracy": 92.03,
+      "correct_count": 9203,
+      "test_count": 10000,
+      "epoch": 100,
+      "training_date": "2026-03-23",
+      "quantization": "FP32",
+      "source": "qua_v10.py",
+      "checkpoint_sha256": "5203decd9d22ef22db755a37f1b3329699fd20a0f1e7823c6316421835c2d31f",
+      "verified_confusion_matrix": "results/verified_models/confusion_matrix_t4_verified.png",
+      "checkpoint": "checkpoints/qsn_sresnet20_t4_best.pth",
+      "evaluation_seconds": 3.358250888006296,
+      "strict_load": {
+        "missing_keys": [],
+        "unexpected_keys": []
+      },
+      "existing_confusion_matrix": {
+        "path": "results/confusion_matrix_v10.png",
+        "sha256": "9010f1c6fc16a6b247b08a19c3638423c79a16d3f96a13dc9f6f3e995e8600b5",
+        "comparison": "source raster has no recoverable numeric matrix; regenerated from this evaluation's 10000 predictions"
+      },
+      "verified_confusion_matrix_sha256": "4ffe0ccb59d5694d9a333a3a04d5f244a7dee96fa9a27b1bee741a813e28dcac",
+      "previous_test_accuracy": 92.03,
+      "accuracy_difference": 0.0
+    },
+    {
+      "model": "SResNet20",
+      "spike_type": "quaternary",
+      "spike_values": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "time_steps": 6,
+      "tau": 0.9,
+      "dataset": "CIFAR-10",
+      "test_accuracy": 92.07,
+      "correct_count": 9207,
+      "test_count": 10000,
+      "epoch": 100,
+      "training_date": null,
+      "quantization": "FP32",
+      "source": "qua_timestep_6.py",
+      "checkpoint_sha256": "6813f24a70a1ff37b4283ea2b968e408990a98c1af37f6ec32643562b0b150a1",
+      "verified_confusion_matrix": "results/verified_models/confusion_matrix_t6_verified.png",
+      "checkpoint": "original/quaternary_sresnet20_qua_t_6_best_weights.pth",
+      "evaluation_seconds": 4.815218381991144,
+      "strict_load": {
+        "missing_keys": [],
+        "unexpected_keys": []
+      },
+      "existing_confusion_matrix": {
+        "path": "original/confusion_matrix_qua_t_6.png",
+        "sha256": "b0f1513699ca6770f6108ef32017bc7badbdb8e16306e1e6be74569b6a33f81c",
+        "comparison": "source raster has no recoverable numeric matrix; regenerated from this evaluation's 10000 predictions"
+      },
+      "verified_confusion_matrix_sha256": "c6850f7dde166fa314db4a987d984cf294ce876bde75b53b62dc1ae2606ac4f9",
+      "previous_test_accuracy": null,
+      "accuracy_difference": null
+    }
+  ]
+}

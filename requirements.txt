@@ -1,0 +1,10 @@
+torch>=2.2
+torchvision>=0.17
+PySide6>=6.7
+numpy
+pandas
+matplotlib
+seaborn
+scikit-learn
+Pillow>=10.0
+pytest>=8.0
