@@ -409,12 +409,4 @@ def spike_bars_html(counts: dict[int, int]) -> str:
             f'<small>{percentage:.2f}%</small></div>'
             "</div>"
         )
-    zero_rate = 100.0 * max(0, int(counts.get(0, 0))) / total if total else 0.0
-    nonzero_rate = 100.0 - zero_rate if total else 0.0
-    rates = (
-        '<div class="rate-grid">'
-        f'<div><span>零脈衝比例</span><strong>{zero_rate:.2f}%</strong></div>'
-        f'<div><span>非零脈衝比例</span><strong>{nonzero_rate:.2f}%</strong></div>'
-        "</div>"
-    )
-    return '<div class="chart-title">四元脈衝分布</div>' + "".join(rows) + rates
+    return '<div class="chart-title">四元脈衝分布</div>' + "".join(rows)

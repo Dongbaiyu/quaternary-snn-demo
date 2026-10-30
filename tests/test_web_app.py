@@ -34,6 +34,7 @@ from web_app.components import (
     pixel_image_html,
     report_image_html,
     recorded_results_table_html,
+    spike_bars_html,
 )
 
 
@@ -136,6 +137,15 @@ def test_demo_image_is_embedded_as_valid_png_data_uri(samples):
     markup = pixel_image_html(image, 'sample <image>')
     assert uri[:32] in markup
     assert 'alt="sample &lt;image&gt;"' in markup
+
+
+def test_spike_chart_keeps_all_four_counts_without_rate_summary():
+    markup = spike_bars_html({-1: 10, 0: 5, 1: 3, 2: 2})
+    for value in (-1, 0, 1, 2):
+        assert f"脈衝 {value}" in markup
+    assert "零脈衝比例" not in markup
+    assert "非零脈衝比例" not in markup
+    assert "rate-grid" not in markup
 
 
 def test_all_model_report_images_are_embedded_as_valid_png_data_uris():

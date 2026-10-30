@@ -252,7 +252,7 @@ div[data-testid="stButton"] button[kind="primary"]:hover { background: #000 !imp
 .stApp:has(.inference-layout-marker) .rate-grid strong { font-size: .9rem; }
 .stApp:has(.inference-layout-marker) .result-panel-empty { height: 210px; }
 .stApp:has(.inference-layout-marker) .probability-panel-empty { height: 262px; }
-.stApp:has(.inference-layout-marker) .spike-panel-empty { height: 188px; }
+.stApp:has(.inference-layout-marker) .spike-panel-empty { height: 156px; }
 
 /* Thin dividers leave the three inference columns visually separate and readable. */
 [data-testid="stElementContainer"]:has(.overview-layout-marker) { display: none; }
@@ -331,8 +331,14 @@ div[data-testid="stButton"] button[kind="primary"]:hover { background: #000 !imp
   height: clamp(255px, calc((100vh - 160px) / 2), 330px);
 }
 .stApp:has(.inference-layout-marker) .result-panel {
+  display: flex;
+  flex-direction: column;
   font-size: .92rem;
   line-height: 1.5;
+}
+.stApp:has(.inference-layout-marker) .result-panel hr {
+  flex: 0 0 auto;
+  width: 100%;
 }
 .stApp:has(.inference-layout-marker) .result-panel .small-muted {
   font-size: .8rem;
@@ -342,16 +348,26 @@ div[data-testid="stButton"] button[kind="primary"]:hover { background: #000 !imp
   font-size: clamp(3rem, 4vw, 4.2rem);
 }
 .stApp:has(.inference-layout-marker) .top-three {
+  margin: auto 0;
   font-size: .92rem;
   line-height: 1.7;
 }
 .stApp:has(.inference-layout-marker) .chart-panel:not(.spike-panel) .chart-title {
   font-size: 1.05rem;
 }
+.stApp:has(.inference-layout-marker) .spike-panel {
+  width: min(88%, 320px);
+  margin: .9rem auto 0;
+}
+@media (min-width: 1000px) {
+  .stApp:has(.inference-layout-marker) [data-testid="stColumn"]:has(.inference-model-info) {
+    transform: translateY(clamp(1rem, calc(18.6vh - 111px), 4.65rem));
+  }
+}
 
 @media (max-height: 800px) and (min-width: 1000px) {
-  .stApp:has(.inference-layout-marker) .pixel-image { width: min(100%, 300px); }
-  .stApp:has(.inference-layout-marker) .section-heading { margin: .1rem 0 .3rem; }
+  .stApp:has(.inference-layout-marker) .pixel-image { width: min(100%, 332px); }
+  .stApp:has(.inference-layout-marker) .section-heading { margin: .7rem 0 .3rem; }
   .stApp:has(.inference-layout-marker) [data-testid="stVerticalBlock"] { gap: .28rem; }
 }
 
