@@ -270,11 +270,8 @@ def test_streamlit_overview_smoke_run():
         time_step_select.set_value(selected_t).run(timeout=120)
         assert not app.exception
         assert not app.warning
-        assert any(
-            f"最佳測試準確率：{accuracy}" in success.value
-            for success in app.success
-        )
         info_html = "\n".join(item.value for item in app.markdown)
+        assert f'<strong>最佳測試準確率</strong><span>{accuracy}</span>' in info_html
         assert checkpoint not in info_html
         assert source not in info_html
         assert f"<strong>TAU／裝置</strong><span>{tau}／" in info_html
@@ -288,7 +285,8 @@ def test_streamlit_overview_smoke_run():
         "T=4-trained checkpoint" in warning.value for warning in app.warning
     )
     assert any(
-        "最佳測試準確率：92.03%" in success.value for success in app.success
+        '<strong>最佳測試準確率</strong><span>92.03%</span>' in item.value
+        for item in app.markdown
     )
     assert not any("此數值來自 all_time_step_results" in caption.value for caption in app.caption)
 

@@ -218,7 +218,7 @@ div[data-testid="stButton"] button[kind="primary"]:hover { background: #000 !imp
 /* Keep the complete inference workspace within a desktop viewport. */
 .stApp:has(.inference-layout-marker) .block-container { padding-top: .55rem; padding-bottom: 0; }
 .stApp:has(.inference-layout-marker) [data-testid="stButtonGroup"] { margin-bottom: .35rem; }
-.stApp:has(.inference-layout-marker) .section-heading { margin: .25rem 0 .45rem; padding-bottom: .25rem; }
+.stApp:has(.inference-layout-marker) .section-heading { margin: .25rem 0 .45rem; padding-bottom: 0; border-bottom: 0; }
 .stApp:has(.inference-layout-marker) .section-heading > span { display: none; }
 .stApp:has(.inference-layout-marker) .section-heading h2 { margin: 0; font-size: 1.35rem; }
 [data-testid="stElementContainer"]:has(.inference-layout-marker) { display: none; }
@@ -310,6 +310,44 @@ div[data-testid="stButton"] button[kind="primary"]:hover { background: #000 !imp
   background: transparent;
 }
 .stApp:has(.inference-layout-marker) .result-panel hr { border-color: var(--line); }
+.stApp:has(.inference-layout-marker) .inference-model-info > div {
+  padding: .6rem 0;
+  font-size: .77rem;
+}
+.stApp:has(.inference-layout-marker) .inference-model-info .accuracy-row {
+  border-bottom: 0;
+}
+.stApp:has(.inference-layout-marker) .inference-model-info .accuracy-row strong {
+  color: var(--ink);
+}
+.stApp:has(.inference-layout-marker) .inference-model-info .accuracy-row span {
+  color: var(--ink);
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+.stApp:has(.inference-layout-marker) .result-panel,
+.stApp:has(.inference-layout-marker) .chart-panel:not(.spike-panel) {
+  box-sizing: border-box;
+  height: clamp(255px, calc((100vh - 160px) / 2), 330px);
+}
+.stApp:has(.inference-layout-marker) .result-panel {
+  font-size: .92rem;
+  line-height: 1.5;
+}
+.stApp:has(.inference-layout-marker) .result-panel .small-muted {
+  font-size: .8rem;
+}
+.stApp:has(.inference-layout-marker) .top-one {
+  margin: .15rem 0 .45rem;
+  font-size: clamp(3rem, 4vw, 4.2rem);
+}
+.stApp:has(.inference-layout-marker) .top-three {
+  font-size: .92rem;
+  line-height: 1.7;
+}
+.stApp:has(.inference-layout-marker) .chart-panel:not(.spike-panel) .chart-title {
+  font-size: 1.05rem;
+}
 
 @media (max-height: 800px) and (min-width: 1000px) {
   .stApp:has(.inference-layout-marker) .pixel-image { width: min(100%, 300px); }
@@ -326,6 +364,8 @@ div[data-testid="stButton"] button[kind="primary"]:hover { background: #000 !imp
   .metric-grid.four { grid-template-columns: repeat(2,minmax(0,1fr)); }
 }
 @media (max-width: 900px) {
+  .stApp:has(.inference-layout-marker) .result-panel,
+  .stApp:has(.inference-layout-marker) .chart-panel:not(.spike-panel) { height: auto; min-height: 255px; }
   .block-container { padding-inline: 1.15rem; }
   .hero-layout { grid-template-columns: 1fr; }
   .hero-evidence { grid-template-columns: minmax(220px,1.1fr) minmax(180px,.9fr); }

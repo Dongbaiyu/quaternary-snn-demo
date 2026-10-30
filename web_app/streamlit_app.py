@@ -296,7 +296,7 @@ def render_result(expected_result_key: str) -> None:
         '<div class="small-muted">第一名預測</div>'
         f'<div class="top-one">{result.predicted_class}</div>'
         f"<div>{correctness}</div><hr>"
-        f"<strong>前三名預測</strong><br>{top3}"
+        f'<div class="top-three"><strong>前三名預測</strong><br>{top3}</div>'
         "</div>"
         f'<div class="chart-panel">{probability_bars_html(result.class_scores)}</div>',
         unsafe_allow_html=True,
@@ -400,29 +400,28 @@ def render_inference(
             image_index = sample.index
             source = f"verified_sample:{sample.index}"
 
+        is_verified_setting = is_verified_time_steps(
+            current_time_steps, checkpoint_training_t
+        )
+        accuracy_label = (
+            "最佳測試準確率"
+            if is_verified_setting
+            else f"T={checkpoint_training_t} 權重最佳測試準確率"
+        )
         st.markdown(
             '<div class="info-panel inference-model-info">'
             f"<div><strong>模型</strong><span>{metadata['model']}</span></div>"
             '<div><strong>脈衝值</strong><span>{-1, 0, 1, 2}</span></div>'
             f"<div><strong>訓練／推論時間步</strong><span>T={checkpoint_training_t}／T={current_time_steps}</span></div>"
             f"<div><strong>TAU／裝置</strong><span>{metadata['tau']}／{service.device_label}</span></div>"
+            f'<div class="accuracy-row"><strong>{accuracy_label}</strong>'
+            f'<span>{spec.recorded_test_accuracy:.2f}%</span></div>'
             "</div>", unsafe_allow_html=True,
         )
-        is_verified_setting = is_verified_time_steps(
-            current_time_steps, checkpoint_training_t
-        )
-        if is_verified_setting:
-            st.success(
-                f"最佳測試準確率：{spec.recorded_test_accuracy:.2f}%"
-            )
-        else:
+        if not is_verified_setting:
             st.warning(
                 f"此結果使用 T={checkpoint_training_t}-trained checkpoint "
                 f"進行 T={current_time_steps} 實驗性推論，尚未完成此組合的完整測試。"
-            )
-            st.caption(
-                f"T={checkpoint_training_t} 權重的最佳測試準確率："
-                f"{spec.recorded_test_accuracy:.2f}%"
             )
         run_clicked = st.button(
             "開始推論",
