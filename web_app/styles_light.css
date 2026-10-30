@@ -136,9 +136,6 @@ h1, h2, h3 { letter-spacing: -0.025em; }
 .pipeline-stage strong { color: var(--ink); font-size: .92rem; line-height: 1.3; }
 .pipeline-stage small { color: var(--muted); font-size: .68rem; line-height: 1.4; }
 .pipeline .arrow { display: none; }
-.trust-note { display: flex; gap: .9rem; align-items: flex-start; margin: 1rem 0; padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: .85rem; background: var(--surface); }
-.trust-note > span { color: var(--dark); font-size: 1.15rem; } .trust-note strong { color: var(--ink); }
-.trust-note p { margin: .2rem 0 0; color: var(--muted); line-height: 1.55; }
 
 /* Inference, results and evidence */
 .info-panel, .result-panel, .chart-panel, .recorded-results-wrap, .result-placeholder { border: 1px solid var(--line); border-radius: .9rem; background: var(--surface); box-shadow: 0 7px 20px rgba(24,30,36,.035); }
@@ -329,6 +326,8 @@ div[data-testid="stButton"] button[kind="primary"]:hover { background: #000 !imp
 .stApp:has(.inference-layout-marker) .result-panel {
   display: flex;
   flex-direction: column;
+  border-top: 0;
+  padding-top: .2rem;
   font-size: .92rem;
   line-height: 1.5;
 }
@@ -337,7 +336,7 @@ div[data-testid="stButton"] button[kind="primary"]:hover { background: #000 !imp
   width: 100%;
 }
 .stApp:has(.inference-layout-marker) .result-panel .small-muted {
-  font-size: .8rem;
+  font-size: 1.05rem;
 }
 .stApp:has(.inference-layout-marker) .top-one {
   margin: .15rem 0 .45rem;
@@ -345,6 +344,7 @@ div[data-testid="stButton"] button[kind="primary"]:hover { background: #000 !imp
 }
 .stApp:has(.inference-layout-marker) .top-three {
   margin: auto 0;
+  transform: translateY(.35rem);
   font-size: .92rem;
   line-height: 1.7;
 }

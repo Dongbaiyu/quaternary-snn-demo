@@ -194,12 +194,6 @@ def render_overview(
         unsafe_allow_html=True,
     )
     st.markdown(pipeline_html(), unsafe_allow_html=True)
-    st.markdown(
-        '<div class="trust-note"><span>◈</span><div><strong>展示版僅執行推論</strong>'
-        '<p>使用預先訓練完成的 FP32 checkpoint；不重新訓練、'
-        '不下載 CIFAR-10、不執行 INT8 conversion。</p></div></div>',
-        unsafe_allow_html=True,
-    )
     st.button(
         "開始快速展示",
         type="primary",

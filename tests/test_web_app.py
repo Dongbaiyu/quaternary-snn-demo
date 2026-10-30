@@ -270,6 +270,7 @@ def test_streamlit_overview_smoke_run():
     assert "四元脈衝神經網路" in overview_markup
     assert "實驗模型總覽" in overview_markup
     assert "軟體推論資料流" in overview_markup
+    assert "展示版僅執行推論" not in overview_markup
     assert "模型設定" not in overview_markup
     assert "推論流程" not in overview_markup
     app.segmented_control[0].set_value("推論").run(timeout=120)
