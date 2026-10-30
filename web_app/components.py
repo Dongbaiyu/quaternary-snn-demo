@@ -262,14 +262,12 @@ def metric_card_html(label: str, value: str, accent: bool = False) -> str:
 
 
 def hero_html(time_steps: int, tau: float, accuracy: float, device: str) -> str:
-    """Formal editorial hero with no external assets or institutional branding."""
+    """Formal light dashboard hero with no institutional branding."""
     return (
         '<section class="editorial-hero">'
-        '<div class="hero-topline"><strong>QUATERNARY SNN / 2026</strong>'
-        '<span><i class="live-dot"></i> MODEL READY</span></div>'
         '<div class="hero-layout"><div class="hero-copy">'
-        '<div class="eyebrow">INFERENCE &amp; VISUALIZATION</div>'
-        '<h1>四元脈衝<br><em>神經網路</em></h1>'
+        '<div class="eyebrow">MODEL OVERVIEW</div>'
+        '<h1>四元脈衝神經網路<br><em>推論與視覺化系統</em></h1>'
         '<p class="hero-deck">以 SResNet20 呈現多時間步推論、四元脈衝統計與 '
         'CIFAR-10 分類結果的可追溯展示系統。</p>'
         '<div class="hero-tags">'
@@ -285,13 +283,11 @@ def hero_html(time_steps: int, tau: float, accuracy: float, device: str) -> str:
         '<div class="signal-core"><small>SPIKE VALUES</small><strong>{-1, 0, 1, 2}</strong></div>'
         '</div>'
         '<div class="hero-facts">'
-        f'<div><small>BEST TEST</small><strong>{accuracy:.2f}%</strong></div>'
+        f'<div class="featured"><small>BEST TEST</small><strong>{accuracy:.2f}%</strong></div>'
         '<div><small>DATASET</small><strong>CIFAR-10</strong></div>'
         '<div><small>ARCHITECTURE</small><strong>RESNET-20</strong></div>'
         '<div><small>OUTPUT</small><strong>10 CLASSES</strong></div>'
         '</div></div></div>'
-        '<div class="hero-foot"><span>PRE-TRAINED CHECKPOINT</span>'
-        '<span>SOFTWARE INFERENCE</span><span>SESSION-SAFE</span></div>'
         '</section>'
     )
 

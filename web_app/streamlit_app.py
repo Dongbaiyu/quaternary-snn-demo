@@ -113,7 +113,7 @@ def cached_image(path: str, modified_ns: int) -> Image.Image:
 
 
 def load_css() -> None:
-    css_path = PROJECT_ROOT / "web_app" / "styles.css"
+    css_path = PROJECT_ROOT / "web_app" / "styles_light.css"
     st.markdown(f"<style>{css_path.read_text(encoding='utf-8')}</style>", unsafe_allow_html=True)
 
 
@@ -656,15 +656,6 @@ def main() -> None:
         st.error(f"模型載入失敗：{exc}")
         return
 
-    st.markdown(
-        '<div class="app-topbar">'
-        '<div class="topbar-brand"><div class="brand-mark">Q</div>'
-        '<div><strong>QUATERNARY SNN</strong><small>Inference System</small></div></div>'
-        '<div class="topbar-status"><span class="live-dot"></span>'
-        f'<div><small>MODEL ONLINE</small><strong>T={spec.time_steps} · TAU={spec.tau}</strong>'
-        f'<em>{service.device_label} · FP32</em></div></div></div>',
-        unsafe_allow_html=True,
-    )
     st.segmented_control(
         "Navigation",
         PAGES,

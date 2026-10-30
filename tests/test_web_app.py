@@ -242,6 +242,12 @@ def test_streamlit_overview_smoke_run():
     assert app.title or app.markdown
     assert not app.sidebar.radio
     assert app.segmented_control[0].value == "系統總覽"
+    overview_markup = "\n".join(item.value for item in app.markdown)
+    assert "app-topbar" not in overview_markup
+    assert "QUATERNARY SNN" not in overview_markup
+    assert "MODEL ONLINE" not in overview_markup
+    assert "Inference System" not in overview_markup
+    assert "四元脈衝神經網路" in overview_markup
     app.segmented_control[0].set_value("推論").run(timeout=120)
     assert not app.exception
     labels = {widget.label for widget in app.selectbox}
@@ -307,3 +313,6 @@ def test_public_streamlit_config_hides_developer_details():
     assert config["client"]["showErrorDetails"] == "none"
     assert config["client"]["showErrorLinks"] is False
     assert config["client"]["showSidebarNavigation"] is False
+    assert config["theme"]["base"] == "light"
+    assert config["theme"]["backgroundColor"] == "#f4f5f7"
+    assert config["theme"]["textColor"] == "#15171a"
