@@ -261,17 +261,13 @@ def metric_card_html(label: str, value: str, accent: bool = False) -> str:
     )
 
 
-def hero_html(time_steps: int, tau: float, accuracy: float, device: str) -> str:
+def hero_html(accuracy: float) -> str:
     """Formal light dashboard hero with no institutional branding."""
     return (
         '<section class="editorial-hero">'
         '<div class="hero-layout"><div class="hero-copy">'
-        '<div class="eyebrow">系統總覽</div>'
         '<h1>四元脈衝神經網路<br><em>推論與視覺化系統</em></h1>'
-        '<div class="hero-tags">'
-        f'<span>SResNet20</span><span>T={int(time_steps)}</span>'
-        f'<span>TAU={float(tau):g}</span><span>{html.escape(device)} · FP32</span>'
-        '</div></div>'
+        '</div>'
         '<div class="hero-evidence">'
         '<div class="signal-map" aria-hidden="true">'
         '<span class="signal-ring r1"></span><span class="signal-ring r2"></span>'

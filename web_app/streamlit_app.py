@@ -161,12 +161,7 @@ def render_overview(
 ) -> None:
     st.markdown('<div class="overview-layout-marker" hidden></div>', unsafe_allow_html=True)
     st.markdown(
-        hero_html(
-            spec.time_steps,
-            spec.tau,
-            spec.recorded_test_accuracy,
-            service.device_label,
-        ),
+        hero_html(spec.recorded_test_accuracy),
         unsafe_allow_html=True,
     )
     st.markdown(

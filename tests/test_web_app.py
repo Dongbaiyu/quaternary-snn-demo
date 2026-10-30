@@ -23,6 +23,7 @@ from web_app.components import (
     create_cpu_service,
     ensure_session_history,
     history_csv_bytes,
+    hero_html,
     load_sample_image,
     implementation_source_label,
     inference_result_key,
@@ -86,6 +87,15 @@ def test_recorded_result_table_matches_user_provided_summary():
         assert value in table
     assert "三元脈衝（文獻）" in table
     assert "四元脈衝" in table
+
+
+def test_overview_hero_only_shows_title_and_evidence():
+    markup = hero_html(92.03)
+    assert "四元脈衝神經網路" in markup
+    assert "推論與視覺化系統" in markup
+    assert "92.03%" in markup
+    assert 'class="eyebrow"' not in markup
+    assert 'class="hero-tags"' not in markup
 
 def test_metadata_source_is_implementation_not_inference_time_step():
     metadata = load_metadata()
