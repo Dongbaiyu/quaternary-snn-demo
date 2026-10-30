@@ -213,7 +213,12 @@ div[data-testid="stButton"] button[kind="primary"]:hover { background: #000 !imp
 .stApp:has(.inference-layout-marker) [data-testid="stButtonGroup"] { margin-bottom: .35rem; }
 .stApp:has(.inference-layout-marker) .section-heading { margin: .25rem 0 .45rem; padding-bottom: 0; border-bottom: 0; }
 .stApp:has(.inference-layout-marker) .section-heading > span { display: none; }
-.stApp:has(.inference-layout-marker) .section-heading h2 { margin: 0; font-size: 1.35rem; }
+.stApp:has(.inference-layout-marker) .section-heading h2 {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
 [data-testid="stElementContainer"]:has(.inference-layout-marker) { display: none; }
 .stApp:has(.inference-layout-marker) [data-testid="stVerticalBlock"] { gap: .42rem; }
 .stApp:has(.inference-layout-marker) [data-testid="stSelectbox"] label,
