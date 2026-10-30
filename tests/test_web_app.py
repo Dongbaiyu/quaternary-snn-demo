@@ -248,14 +248,15 @@ def test_streamlit_overview_smoke_run():
     assert "MODEL ONLINE" not in overview_markup
     assert "Inference System" not in overview_markup
     assert "四元脈衝神經網路" in overview_markup
+    assert "實驗模型總覽" in overview_markup
+    assert "軟體推論資料流" in overview_markup
+    assert "模型設定" not in overview_markup
+    assert "推論流程" not in overview_markup
     app.segmented_control[0].set_value("推論").run(timeout=120)
     assert not app.exception
     labels = {widget.label for widget in app.selectbox}
     assert "推論時間步" in labels
-    assert any(
-        "模型來源</strong><span>qua_v10.py" in item.value
-        for item in app.markdown
-    )
+    assert not any("模型來源" in item.value or "權重檔案" in item.value for item in app.markdown)
 
     expected_models = {
         1: ("91.18%", "quaternary_sresnet20_qua_t_1_best_weights.pth", "qua_timestep_1.py", "0.875"),
@@ -274,8 +275,8 @@ def test_streamlit_overview_smoke_run():
             for success in app.success
         )
         info_html = "\n".join(item.value for item in app.markdown)
-        assert checkpoint in info_html
-        assert source in info_html
+        assert checkpoint not in info_html
+        assert source not in info_html
         assert f"<strong>TAU／裝置</strong><span>{tau}／" in info_html
 
     time_step_select = next(
@@ -295,6 +296,7 @@ def test_streamlit_overview_smoke_run():
     run_button.click().run(timeout=120)
     assert not app.exception
     assert any("第一名預測" in item.value for item in app.markdown)
+    assert not any("推論時間：" in item.value or "統計範圍：" in item.value for item in app.markdown)
 
     time_step_select = next(
         widget for widget in app.selectbox if widget.label == "推論時間步"

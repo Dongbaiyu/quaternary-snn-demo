@@ -254,8 +254,65 @@ div[data-testid="stButton"] button[kind="primary"]:hover { background: #000 !imp
 .stApp:has(.inference-layout-marker) .probability-panel-empty { height: 262px; }
 .stApp:has(.inference-layout-marker) .spike-panel-empty { height: 188px; }
 
+/* Thin dividers leave the three inference columns visually separate and readable. */
+[data-testid="stElementContainer"]:has(.overview-layout-marker) { display: none; }
+.stApp:has(.overview-layout-marker) .section-heading {
+  display: block;
+  margin: 2.1rem 0 .9rem;
+  text-align: right;
+}
+.stApp:has(.overview-layout-marker) .section-heading > span { display: none; }
+.stApp:has(.overview-layout-marker) .section-heading h2 { margin: 0; }
+.stApp:has(.inference-layout-marker) .info-panel,
+.stApp:has(.inference-layout-marker) .result-panel,
+.stApp:has(.inference-layout-marker) .chart-panel {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+.stApp:has(.inference-layout-marker) .inference-model-info {
+  padding: .45rem 0;
+  border-top: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line-strong);
+}
+.stApp:has(.inference-layout-marker) .result-panel,
+.stApp:has(.inference-layout-marker) .chart-panel {
+  border-top: 1px solid var(--line-strong);
+  padding: .65rem 0;
+}
+.stApp:has(.inference-layout-marker) .result-panel-empty,
+.stApp:has(.inference-layout-marker) .probability-panel-empty,
+.stApp:has(.inference-layout-marker) .spike-panel-empty { min-height: 0; }
+.stApp:has(.inference-layout-marker) .pixel-image {
+  width: min(100%, 360px);
+  border: 1px solid var(--line-strong);
+  border-radius: .35rem;
+}
+.stApp:has(.inference-layout-marker) .image-caption {
+  justify-content: center;
+  gap: .25rem 1rem;
+  min-height: 2rem;
+  margin: .4rem 0 0;
+  padding: .2rem .3rem .75rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.stApp:has(.inference-layout-marker) .image-caption strong { color: var(--ink); }
+.stApp:has(.inference-layout-marker) .spike-panel { margin-top: 0; padding-bottom: .2rem; }
+.stApp:has(.inference-layout-marker) .spike-panel .bar-row { margin: .1rem 0; }
+.stApp:has(.inference-layout-marker) .spike-panel .rate-grid { margin-top: .3rem; }
+.stApp:has(.inference-layout-marker) .spike-panel .rate-grid > div { padding: .2rem .35rem; }
+.stApp:has(.inference-layout-marker) .rate-grid > div {
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+}
+.stApp:has(.inference-layout-marker) .result-panel hr { border-color: var(--line); }
+
 @media (max-height: 800px) and (min-width: 1000px) {
-  .stApp:has(.inference-layout-marker) .pixel-image { width: min(100%, 230px); }
+  .stApp:has(.inference-layout-marker) .pixel-image { width: min(100%, 300px); }
   .stApp:has(.inference-layout-marker) .section-heading { margin: .1rem 0 .3rem; }
   .stApp:has(.inference-layout-marker) [data-testid="stVerticalBlock"] { gap: .28rem; }
 }

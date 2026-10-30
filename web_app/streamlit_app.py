@@ -159,6 +159,7 @@ def render_overview(
     samples: list[WebDemoSample],
     spec: ModelSpec,
 ) -> None:
+    st.markdown('<div class="overview-layout-marker" hidden></div>', unsafe_allow_html=True)
     st.markdown(
         hero_html(
             spec.time_steps,
@@ -170,7 +171,7 @@ def render_overview(
     )
     st.markdown(
         section_header_html(
-            "模型設定",
+            "",
             "實驗模型總覽",
         ),
         unsafe_allow_html=True,
@@ -192,7 +193,7 @@ def render_overview(
     st.markdown(accuracy_strip_html(spec.time_steps), unsafe_allow_html=True)
     st.markdown(
         section_header_html(
-            "推論流程",
+            "",
             "軟體推論資料流",
         ),
         unsafe_allow_html=True,
@@ -259,17 +260,23 @@ def execute_inference(
     )
 
 
-def render_result(metadata: dict, expected_result_key: str) -> None:
+def render_result(expected_result_key: str) -> None:
     result = st.session_state.last_result
     context = st.session_state.last_context
     if result is None or context is None:
-        st.markdown('<div class="result-panel result-panel-empty" aria-label="推論結果"></div>', unsafe_allow_html=True)
-        st.markdown('<div class="chart-panel probability-panel-empty" aria-label="分類機率"></div>', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="result-panel result-panel-empty" aria-label="推論結果"></div>'
+            '<div class="chart-panel probability-panel-empty" aria-label="分類機率"></div>',
+            unsafe_allow_html=True,
+        )
         return
     true_label = context["true_label"]
     if context.get("result_key") != expected_result_key:
-        st.markdown('<div class="result-panel result-panel-empty" aria-label="推論結果"></div>', unsafe_allow_html=True)
-        st.markdown('<div class="chart-panel probability-panel-empty" aria-label="分類機率"></div>', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="result-panel result-panel-empty" aria-label="推論結果"></div>'
+            '<div class="chart-panel probability-panel-empty" aria-label="分類機率"></div>',
+            unsafe_allow_html=True,
+        )
         return
 
     is_correct = result.predicted_class == true_label if true_label is not None else None
@@ -289,34 +296,24 @@ def render_result(metadata: dict, expected_result_key: str) -> None:
         '<div class="small-muted">第一名預測</div>'
         f'<div class="top-one">{result.predicted_class}</div>'
         f"<div>{correctness}</div><hr>"
-        f"<strong>前三名預測</strong><br>{top3}<hr>"
-        f"<strong>推論時間：</strong>{result.inference_time * 1000:.2f} ms<br>"
-        f"<strong>訓練時間步：</strong>{normalize_time_steps(metadata['time_steps'])}<br>"
-        f"<strong>目前推論時間步：</strong>{normalize_time_steps(result.time_steps)}<br>"
-        f"<strong>權重檔案：</strong>{result.checkpoint_name}"
-        "</div>",
-        unsafe_allow_html=True,
-    )
-    st.markdown(
+        f"<strong>前三名預測</strong><br>{top3}"
+        "</div>"
         f'<div class="chart-panel">{probability_bars_html(result.class_scores)}</div>',
         unsafe_allow_html=True,
     )
 
 
-def render_spike_result(expected_result_key: str) -> None:
-    """Render the current inference's spike statistics below the source image."""
+def spike_result_html(expected_result_key: str) -> str:
+    """Build the current inference's spike statistics beside the controls."""
     result = st.session_state.last_result
     context = st.session_state.last_context
     if result is None or context is None:
-        st.markdown('<div class="chart-panel spike-panel spike-panel-empty" aria-label="四元脈衝分布"></div>', unsafe_allow_html=True)
-        return
+        return '<div class="chart-panel spike-panel spike-panel-empty" aria-label="四元脈衝分布"></div>'
     if context.get("result_key") != expected_result_key:
-        st.markdown('<div class="chart-panel spike-panel spike-panel-empty" aria-label="四元脈衝分布"></div>', unsafe_allow_html=True)
-        return
-    st.markdown(
-        f'<div class="chart-panel spike-panel">'
-        f'{spike_bars_html(result.spike_statistics)}</div>',
-        unsafe_allow_html=True,
+        return '<div class="chart-panel spike-panel spike-panel-empty" aria-label="四元脈衝分布"></div>'
+    return (
+        '<div class="chart-panel spike-panel">'
+        f'{spike_bars_html(result.spike_statistics)}</div>'
     )
 
 
@@ -409,8 +406,6 @@ def render_inference(
             '<div><strong>脈衝值</strong><span>{-1, 0, 1, 2}</span></div>'
             f"<div><strong>訓練／推論時間步</strong><span>T={checkpoint_training_t}／T={current_time_steps}</span></div>"
             f"<div><strong>TAU／裝置</strong><span>{metadata['tau']}／{service.device_label}</span></div>"
-            f"<div><strong>模型來源</strong><span>{implementation_source_label(metadata['source'])}</span></div>"
-            f"<div><strong>權重檔案</strong><span>{spec.checkpoint.name}</span></div>"
             "</div>", unsafe_allow_html=True,
         )
         is_verified_setting = is_verified_time_steps(
@@ -435,26 +430,21 @@ def render_inference(
             use_container_width=True,
         )
 
-    with middle:
-        image_alt = (
-            f"CIFAR-10 {true_label}, index {image_index}"
-            if true_label is not None
-            else "Uploaded 32 by 32 image"
+    image_alt = (
+        f"CIFAR-10 {true_label}, index {image_index}"
+        if true_label is not None
+        else "Uploaded 32 by 32 image"
+    )
+    image_markup = pixel_image_html(image, image_alt)
+    if true_label is not None:
+        image_markup += (
+            '<div class="image-caption">'
+            f'<span><strong>圖片編號：</strong>{image_index}</span>'
+            f'<span><strong>實際類別：</strong>{true_label}</span>'
+            '<span><strong>圖片尺寸：</strong>32×32 RGB</span></div>'
         )
-        st.markdown(
-            pixel_image_html(image, image_alt),
-            unsafe_allow_html=True,
-        )
-        if true_label is not None:
-            st.markdown(
-                '<div class="image-caption">'
-                f'<span><strong>圖片編號：</strong>{image_index}</span>'
-                f'<span><strong>實際類別：</strong>{true_label}</span>'
-                '<span><strong>圖片尺寸：</strong>32×32 RGB</span></div>',
-                unsafe_allow_html=True,
-            )
-        else:
-            st.markdown("**圖片尺寸：** 32×32 RGB（由上傳圖片轉換）")
+    else:
+        image_markup += '<div class="image-caption">圖片尺寸：32×32 RGB（由上傳圖片轉換）</div>'
 
     should_run = run_clicked or bool(st.session_state.auto_run)
     st.session_state.auto_run = False
@@ -477,9 +467,9 @@ def render_inference(
         metadata["tau"],
     )
     with middle:
-        render_spike_result(expected_result_key)
+        st.markdown(image_markup + spike_result_html(expected_result_key), unsafe_allow_html=True)
     with right:
-        render_result(metadata, expected_result_key)
+        render_result(expected_result_key)
 
 
 def render_model_info(metadata: dict, spec: ModelSpec) -> None:
