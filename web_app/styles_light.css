@@ -203,11 +203,62 @@ h1, h2, h3 { letter-spacing: -0.025em; }
 div[data-testid="stButton"] button, div[data-testid="stDownloadButton"] button { min-height: 2.65rem; border: 1px solid var(--dark) !important; border-radius: .65rem !important; color: var(--ink) !important; background: #fff !important; font-weight: 750 !important; transition: transform 150ms ease, box-shadow 180ms ease, background 180ms ease; }
 div[data-testid="stButton"] button:hover, div[data-testid="stDownloadButton"] button:hover { color: #fff !important; background: var(--dark) !important; box-shadow: 0 8px 18px rgba(20,23,26,.14); transform: translateY(-1px); }
 div[data-testid="stButton"] button[kind="primary"] { color: #fff !important; background: var(--dark) !important; }
+div[data-testid="stButton"] button[kind="primary"] * { color: #fff !important; }
 div[data-testid="stButton"] button[kind="primary"]:hover { background: #000 !important; }
 [data-baseweb="select"] > div, [data-testid="stFileUploaderDropzone"] { border-color: var(--line-strong) !important; border-radius: .65rem !important; color: var(--ink) !important; background: #fff !important; }
 [data-baseweb="select"] *, [data-testid="stFileUploaderDropzone"] *, [data-testid="stSelectbox"] label, [data-testid="stFileUploader"] label { color: var(--ink) !important; }
 [data-testid="stAlert"], [data-testid="stDataFrame"] { overflow: hidden; border: 1px solid var(--line); border-radius: .75rem; color: var(--ink); background: #fff; }
 [data-testid="stExpander"] { border-color: var(--line) !important; border-radius: .75rem !important; background: #fff; }
+[data-testid="stFileUploaderDropzone"] [data-testid="stIconMaterial"],
+[data-testid="stFileUploaderDropzone"] button p,
+[data-testid="stFileUploaderDropzoneInstructions"] span { display: none; }
+[data-testid="stFileUploaderDropzone"] button::after { content: "選擇圖片"; color: var(--ink); font-size: .75rem; font-weight: 700; }
+[data-testid="stFileUploaderDropzoneInstructions"]::after { content: "PNG、JPG、WEBP · 每張上限 10 MB"; color: var(--muted); font-size: .65rem; }
+
+/* Keep the complete inference workspace within a desktop viewport. */
+.stApp:has(.inference-layout-marker) .block-container { padding-top: .55rem; padding-bottom: 0; }
+.stApp:has(.inference-layout-marker) [data-testid="stButtonGroup"] { margin-bottom: .35rem; }
+.stApp:has(.inference-layout-marker) .section-heading { margin: .25rem 0 .45rem; padding-bottom: .25rem; }
+.stApp:has(.inference-layout-marker) .section-heading > span { display: none; }
+.stApp:has(.inference-layout-marker) .section-heading h2 { margin: 0; font-size: 1.35rem; }
+[data-testid="stElementContainer"]:has(.inference-layout-marker) { display: none; }
+.stApp:has(.inference-layout-marker) [data-testid="stVerticalBlock"] { gap: .42rem; }
+.stApp:has(.inference-layout-marker) [data-testid="stSelectbox"] label,
+.stApp:has(.inference-layout-marker) [data-testid="stFileUploader"] label { font-size: .75rem; font-weight: 750; }
+.stApp:has(.inference-layout-marker) [data-testid="stFileUploaderDropzone"] { min-height: 3.1rem; padding: .35rem .6rem; }
+.stApp:has(.inference-layout-marker) [data-testid="stFileUploaderDropzone"] small { display: none; }
+.stApp:has(.inference-layout-marker) [data-testid="stAlert"] { padding: .35rem .6rem; }
+.inference-model-info { margin: .15rem 0 .25rem; padding: .5rem .7rem; font-size: .73rem; line-height: 1.28; }
+.inference-model-info > div { display: flex; justify-content: space-between; gap: .6rem; padding: .24rem 0; border-bottom: 1px solid var(--line); }
+.inference-model-info > div:last-child { border-bottom: 0; }
+.inference-model-info strong { flex: 0 0 auto; color: var(--muted); font-weight: 650; }
+.inference-model-info span { min-width: 0; overflow-wrap: anywhere; text-align: right; }
+.stApp:has(.inference-layout-marker) .pixel-image { width: min(100%, 270px); margin: 0 auto; }
+.image-caption { display: flex; flex-wrap: wrap; gap: .2rem .85rem; padding: .1rem 0; color: var(--ink); font-size: .69rem; }
+.image-caption span { white-space: nowrap; }
+.image-caption strong { margin-right: .2rem; }
+.stApp:has(.inference-layout-marker) .chart-panel { margin-bottom: 0; padding: .65rem .75rem; }
+.stApp:has(.inference-layout-marker) .spike-panel { margin-top: .2rem; }
+.stApp:has(.inference-layout-marker) .spike-panel .bar-row { margin: .23rem 0; }
+.stApp:has(.inference-layout-marker) .spike-panel .rate-grid { margin-top: .45rem; }
+.stApp:has(.inference-layout-marker) .spike-panel .rate-grid > div { padding: .4rem .5rem; }
+.stApp:has(.inference-layout-marker) .result-panel { margin-bottom: .45rem; padding: .7rem .8rem; font-size: .76rem; line-height: 1.4; overflow-wrap: anywhere; }
+.stApp:has(.inference-layout-marker) .result-panel hr { margin: .42rem 0; }
+.stApp:has(.inference-layout-marker) .top-one { margin: .12rem 0 .4rem; font-size: 2.2rem; }
+.stApp:has(.inference-layout-marker) .chart-title { margin-bottom: .3rem; font-size: .9rem; }
+.stApp:has(.inference-layout-marker) .chart-panel .bar-row { margin: .19rem 0; }
+.stApp:has(.inference-layout-marker) .bar-row { font-size: .7rem; }
+.stApp:has(.inference-layout-marker) .rate-grid span { font-size: .61rem; }
+.stApp:has(.inference-layout-marker) .rate-grid strong { font-size: .9rem; }
+.stApp:has(.inference-layout-marker) .result-panel-empty { height: 210px; }
+.stApp:has(.inference-layout-marker) .probability-panel-empty { height: 262px; }
+.stApp:has(.inference-layout-marker) .spike-panel-empty { height: 188px; }
+
+@media (max-height: 800px) and (min-width: 1000px) {
+  .stApp:has(.inference-layout-marker) .pixel-image { width: min(100%, 230px); }
+  .stApp:has(.inference-layout-marker) .section-heading { margin: .1rem 0 .3rem; }
+  .stApp:has(.inference-layout-marker) [data-testid="stVerticalBlock"] { gap: .28rem; }
+}
 
 @media (max-width: 1200px) {
   .hero-layout { grid-template-columns: minmax(0,1fr) minmax(350px,.9fr); gap: 2rem; }

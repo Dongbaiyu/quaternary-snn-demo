@@ -32,7 +32,6 @@ from web_app.components import (
     accuracy_strip_html,
     hero_html,
     history_csv_bytes,
-    inference_empty_html,
     load_metadata,
     implementation_source_label,
     inference_result_key,
@@ -171,38 +170,36 @@ def render_overview(
     )
     st.markdown(
         section_header_html(
-            "MODEL PROFILE",
+            "模型設定",
             "實驗模型總覽",
-            "專用 checkpoint、時間步與 TAU 形成一組不可拆分的模型設定。",
         ),
         unsafe_allow_html=True,
     )
     cards = (
-        metric_card_html("Model", str(metadata["model"]))
-        + metric_card_html("Dataset", str(metadata["dataset"]))
-        + metric_card_html("Spike", "{-1, 0, 1, 2}")
-        + metric_card_html("Checkpoint training T", f"T={metadata['time_steps']}", True)
+        metric_card_html("模型", str(metadata["model"]))
+        + metric_card_html("資料集", str(metadata["dataset"]))
+        + metric_card_html("脈衝值", "{-1, 0, 1, 2}")
+        + metric_card_html("權重訓練時間步", f"T={metadata['time_steps']}", True)
         + metric_card_html("TAU", str(metadata["tau"]))
         + metric_card_html(
-            "Best Test Accuracy", f"{spec.recorded_test_accuracy:.2f}%", True
+            "最佳測試準確率", f"{spec.recorded_test_accuracy:.2f}%", True
         )
-        + metric_card_html("Precision", str(metadata["quantization"]))
-        + metric_card_html("Backend", "PyTorch Inference")
-        + metric_card_html("Device", service.device_label)
+        + metric_card_html("數值精度", str(metadata["quantization"]))
+        + metric_card_html("推論框架", "PyTorch")
+        + metric_card_html("執行裝置", service.device_label)
     )
     st.markdown(f'<div class="metric-grid">{cards}</div>', unsafe_allow_html=True)
     st.markdown(accuracy_strip_html(spec.time_steps), unsafe_allow_html=True)
     st.markdown(
         section_header_html(
-            "INFERENCE PIPELINE",
+            "推論流程",
             "軟體推論資料流",
-            "無獨立 Poisson、rate 或 latency encoder；正規化影像於 T 個時間步重複輸入。",
         ),
         unsafe_allow_html=True,
     )
     st.markdown(pipeline_html(), unsafe_allow_html=True)
     st.markdown(
-        '<div class="trust-note"><span>◈</span><div><strong>Inference-only deployment</strong>'
+        '<div class="trust-note"><span>◈</span><div><strong>展示版僅執行推論</strong>'
         '<p>使用預先訓練完成的 FP32 checkpoint；不重新訓練、'
         '不下載 CIFAR-10、不執行 INT8 conversion。</p></div></div>',
         unsafe_allow_html=True,
@@ -226,7 +223,7 @@ def execute_inference(
 ) -> None:
     selected_time_steps = normalize_time_steps(time_steps)
     try:
-        with st.spinner("CPU inference…"):
+        with st.spinner("正在推論…"):
             result = service.predict_image(image, time_steps=selected_time_steps)
     except Exception as exc:
         st.error(f"推論失敗：{exc}")
@@ -266,20 +263,22 @@ def render_result(metadata: dict, expected_result_key: str) -> None:
     result = st.session_state.last_result
     context = st.session_state.last_context
     if result is None or context is None:
-        st.markdown(inference_empty_html(), unsafe_allow_html=True)
+        st.markdown('<div class="result-panel result-panel-empty" aria-label="推論結果"></div>', unsafe_allow_html=True)
+        st.markdown('<div class="chart-panel probability-panel-empty" aria-label="分類機率"></div>', unsafe_allow_html=True)
         return
     true_label = context["true_label"]
     if context.get("result_key") != expected_result_key:
-        st.info("圖片、checkpoint 或 Time-step 已變更，請重新執行推論。")
+        st.markdown('<div class="result-panel result-panel-empty" aria-label="推論結果"></div>', unsafe_allow_html=True)
+        st.markdown('<div class="chart-panel probability-panel-empty" aria-label="分類機率"></div>', unsafe_allow_html=True)
         return
 
     is_correct = result.predicted_class == true_label if true_label is not None else None
     correctness = (
-        '<span class="correct">Correct ✓</span>'
+        '<span class="correct">分類正確 ✓</span>'
         if is_correct is True
-        else '<span class="incorrect">Incorrect ✕</span>'
+        else '<span class="incorrect">分類錯誤 ✕</span>'
         if is_correct is False
-        else '<span class="small-muted">自訂圖片沒有 CIFAR-10 true label</span>'
+        else '<span class="small-muted">自訂圖片沒有已知的實際類別</span>'
     )
     top3 = "<br>".join(
         f"{rank}. {item.class_name} — {item.score * 100:.2f}%"
@@ -287,14 +286,14 @@ def render_result(metadata: dict, expected_result_key: str) -> None:
     )
     st.markdown(
         '<div class="result-panel">'
-        '<div class="small-muted">Top-1 Prediction</div>'
+        '<div class="small-muted">第一名預測</div>'
         f'<div class="top-one">{result.predicted_class}</div>'
         f"<div>{correctness}</div><hr>"
-        f"<strong>Top-3</strong><br>{top3}<hr>"
-        f"<strong>Inference Time:</strong> {result.inference_time * 1000:.2f} ms<br>"
-        f"<strong>Checkpoint training T:</strong> {normalize_time_steps(metadata['time_steps'])}<br>"
-        f"<strong>Current inference T:</strong> {normalize_time_steps(result.time_steps)}<br>"
-        f"<strong>Checkpoint:</strong> {result.checkpoint_name}"
+        f"<strong>前三名預測</strong><br>{top3}<hr>"
+        f"<strong>推論時間：</strong>{result.inference_time * 1000:.2f} ms<br>"
+        f"<strong>訓練時間步：</strong>{normalize_time_steps(metadata['time_steps'])}<br>"
+        f"<strong>目前推論時間步：</strong>{normalize_time_steps(result.time_steps)}<br>"
+        f"<strong>權重檔案：</strong>{result.checkpoint_name}"
         "</div>",
         unsafe_allow_html=True,
     )
@@ -309,8 +308,10 @@ def render_spike_result(expected_result_key: str) -> None:
     result = st.session_state.last_result
     context = st.session_state.last_context
     if result is None or context is None:
+        st.markdown('<div class="chart-panel spike-panel spike-panel-empty" aria-label="四元脈衝分布"></div>', unsafe_allow_html=True)
         return
     if context.get("result_key") != expected_result_key:
+        st.markdown('<div class="chart-panel spike-panel spike-panel-empty" aria-label="四元脈衝分布"></div>', unsafe_allow_html=True)
         return
     st.markdown(
         f'<div class="chart-panel spike-panel">'
@@ -327,9 +328,8 @@ def render_inference(
 ) -> None:
     st.markdown(
         section_header_html(
-            "LIVE INFERENCE",
+            "單張推論",
             "CIFAR-10 四元 SNN 推論",
-            "選擇已驗證案例與專用 Time-step 模型，即時觀察分類機率與脈衝分布。",
         ),
         unsafe_allow_html=True,
     )
@@ -338,9 +338,10 @@ def render_inference(
     if st.session_state.selected_sample_index not in lookup:
         st.session_state.selected_sample_index = indices[0]
 
+    st.markdown('<div class="inference-layout-marker" hidden></div>', unsafe_allow_html=True)
     checkpoint_training_t = normalize_time_steps(metadata["time_steps"])
-    left, middle, right = st.columns([1, 1, 1], gap="large")
-    with middle:
+    left, middle, right = st.columns([0.92, 1.06, 1.02], gap="medium")
+    with left:
         st.selectbox(
             "展示案例",
             options=indices,
@@ -350,8 +351,11 @@ def render_inference(
         )
         previous, next_column = st.columns(2)
         st.selectbox(
-            "Inference Time-step",
+            "推論時間步",
             options=(1, 2, 4, 6),
+            index=(1, 2, 4, 6).index(
+                normalize_time_steps(st.session_state.selected_time_steps)
+            ),
             key="selected_time_steps",
             format_func=lambda value: f"T = {value}",
             on_change=clear_result,
@@ -400,27 +404,21 @@ def render_inference(
             source = f"verified_sample:{sample.index}"
 
         st.markdown(
-            '<div class="info-panel">'
-            f"<strong>Model:</strong> {metadata['model']}<br>"
-            "<strong>Spike:</strong> {-1, 0, 1, 2}<br>"
-            f"<strong>Checkpoint training T:</strong> {checkpoint_training_t}<br>"
-            f"<strong>Current inference T:</strong> {current_time_steps}<br>"
-            f"<strong>TAU:</strong> {metadata['tau']}<br>"
-            f"<strong>Device:</strong> {service.device_label}<br>"
-            f"<strong>Model implementation source:</strong> {implementation_source_label(metadata['source'])}<br>"
-            f"<strong>Checkpoint:</strong> {spec.checkpoint.name}"
-            "</div>",
-            unsafe_allow_html=True,
+            '<div class="info-panel inference-model-info">'
+            f"<div><strong>模型</strong><span>{metadata['model']}</span></div>"
+            '<div><strong>脈衝值</strong><span>{-1, 0, 1, 2}</span></div>'
+            f"<div><strong>訓練／推論時間步</strong><span>T={checkpoint_training_t}／T={current_time_steps}</span></div>"
+            f"<div><strong>TAU／裝置</strong><span>{metadata['tau']}／{service.device_label}</span></div>"
+            f"<div><strong>模型來源</strong><span>{implementation_source_label(metadata['source'])}</span></div>"
+            f"<div><strong>權重檔案</strong><span>{spec.checkpoint.name}</span></div>"
+            "</div>", unsafe_allow_html=True,
         )
         is_verified_setting = is_verified_time_steps(
             current_time_steps, checkpoint_training_t
         )
         if is_verified_setting:
             st.success(
-                f"Best Test Accuracy：{spec.recorded_test_accuracy:.2f}%"
-            )
-            st.caption(
-                "此數值來自 all_time_step_results 原始訓練成果記錄的 Best Test Accuracy。"
+                f"最佳測試準確率：{spec.recorded_test_accuracy:.2f}%"
             )
         else:
             st.warning(
@@ -428,7 +426,7 @@ def render_inference(
                 f"進行 T={current_time_steps} 實驗性推論，尚未完成此組合的完整測試。"
             )
             st.caption(
-                f"T={checkpoint_training_t} checkpoint recorded Best Test Accuracy："
+                f"T={checkpoint_training_t} 權重的最佳測試準確率："
                 f"{spec.recorded_test_accuracy:.2f}%"
             )
         run_clicked = st.button(
@@ -437,7 +435,7 @@ def render_inference(
             use_container_width=True,
         )
 
-    with left:
+    with middle:
         image_alt = (
             f"CIFAR-10 {true_label}, index {image_index}"
             if true_label is not None
@@ -449,12 +447,14 @@ def render_inference(
         )
         if true_label is not None:
             st.markdown(
-                f"**Image Index:** {image_index}  \n"
-                f"**True Label:** {true_label}  \n"
-                "**Image Size:** 32×32 RGB"
+                '<div class="image-caption">'
+                f'<span><strong>圖片編號：</strong>{image_index}</span>'
+                f'<span><strong>實際類別：</strong>{true_label}</span>'
+                '<span><strong>圖片尺寸：</strong>32×32 RGB</span></div>',
+                unsafe_allow_html=True,
             )
         else:
-            st.markdown("**Image Size:** 32×32 RGB（由上傳圖片轉換）")
+            st.markdown("**圖片尺寸：** 32×32 RGB（由上傳圖片轉換）")
 
     should_run = run_clicked or bool(st.session_state.auto_run)
     st.session_state.auto_run = False
@@ -476,7 +476,7 @@ def render_inference(
         current_time_steps,
         metadata["tau"],
     )
-    with left:
+    with middle:
         render_spike_result(expected_result_key)
     with right:
         render_result(metadata, expected_result_key)
@@ -485,7 +485,7 @@ def render_inference(
 def render_model_info(metadata: dict, spec: ModelSpec) -> None:
     st.markdown(
         section_header_html(
-            "MODEL EVIDENCE",
+            "模型成果",
             "模型成果與可追溯資料",
             "主要成果採用訓練過程記錄的 Best Test Accuracy，並保留 checkpoint 重評資料供實驗追溯。",
         ),
@@ -495,18 +495,18 @@ def render_model_info(metadata: dict, spec: ModelSpec) -> None:
     recorded_accuracy = float(spec.recorded_test_accuracy)
     difference = reevaluated_accuracy - recorded_accuracy
     cards = (
-        metric_card_html("Recorded Best Test Accuracy", f"{recorded_accuracy:.2f}%", True)
-        + metric_card_html("Checkpoint Re-evaluation", f"{reevaluated_accuracy:.2f}%")
-        + metric_card_html("Re-evaluated Correct", f"{metadata['correct_count']}/{metadata['test_count']}")
-        + metric_card_html("Selected Time-step", f"T={spec.time_steps}")
+        metric_card_html("紀錄最佳測試準確率", f"{recorded_accuracy:.2f}%", True)
+        + metric_card_html("權重重新評估", f"{reevaluated_accuracy:.2f}%")
+        + metric_card_html("重新評估答對數", f"{metadata['correct_count']}/{metadata['test_count']}")
+        + metric_card_html("目前時間步", f"T={spec.time_steps}")
     )
     st.markdown(f'<div class="metric-grid four">{cards}</div>', unsafe_allow_html=True)
 
-    st.subheader("ResNet-20 All Time-step Results")
+    st.subheader("SResNet20 各時間步成果")
     st.markdown(recorded_results_table_html(), unsafe_allow_html=True)
     st.caption(
         "原始實驗紀錄來源：results/all_time_step_results。"
-        "表中的 Test accuracy 是訓練期間記錄的 best test accuracy。"
+        "表中測試準確率為訓練期間記錄的最佳測試準確率。"
     )
 
     comparison_rows = []
@@ -516,11 +516,11 @@ def render_model_info(metadata: dict, spec: ModelSpec) -> None:
         current_accuracy = float(item_metadata["test_accuracy"])
         comparison_rows.append(
             {
-                "Time-step": f"T={time_steps}",
-                "Recorded train": f"{item.recorded_train_accuracy:.2f}%",
-                "Recorded best test": f"{item.recorded_test_accuracy:.2f}%",
-                "Checkpoint re-evaluation": f"{current_accuracy:.2f}%",
-                "Difference": f"{current_accuracy - item.recorded_test_accuracy:+.2f} pp",
+                "時間步": f"T={time_steps}",
+                "紀錄訓練準確率": f"{item.recorded_train_accuracy:.2f}%",
+                "紀錄最佳測試準確率": f"{item.recorded_test_accuracy:.2f}%",
+                "權重重新評估": f"{current_accuracy:.2f}%",
+                "差異": f"{current_accuracy - item.recorded_test_accuracy:+.2f} 個百分點",
             }
         )
     st.dataframe(pd.DataFrame(comparison_rows), hide_index=True, width="stretch")
@@ -538,7 +538,7 @@ def render_model_info(metadata: dict, spec: ModelSpec) -> None:
 
     curve, matrix = st.columns(2, gap="large")
     with curve:
-        st.subheader(f"T={spec.time_steps} Original Training Result")
+        st.subheader(f"T={spec.time_steps} 原始訓練成果")
         if spec.training_result.is_file():
             training_image = cached_image(
                 str(spec.training_result), spec.training_result.stat().st_mtime_ns
@@ -553,7 +553,7 @@ def render_model_info(metadata: dict, spec: ModelSpec) -> None:
         else:
             st.error(f"Training result 尚未提供：{spec.training_result.name}")
     with matrix:
-        st.subheader(f"T={spec.time_steps} Re-evaluated Confusion Matrix")
+        st.subheader(f"T={spec.time_steps} 重新評估混淆矩陣")
         if spec.confusion_matrix.is_file():
             confusion_image = cached_image(
                 str(spec.confusion_matrix), spec.confusion_matrix.stat().st_mtime_ns
@@ -568,25 +568,25 @@ def render_model_info(metadata: dict, spec: ModelSpec) -> None:
         else:
             st.error("Confusion matrix 尚未提供")
 
-    st.subheader("Checkpoint Information")
+    st.subheader("權重與模型資訊")
     metadata_rows = (
-        ("Model", metadata["model"]),
-        ("Spike values", "{-1, 0, 1, 2}"),
-        ("Checkpoint training T", normalize_time_steps(metadata["time_steps"])),
+        ("模型", metadata["model"]),
+        ("脈衝值", "{-1, 0, 1, 2}"),
+        ("權重訓練時間步", normalize_time_steps(metadata["time_steps"])),
         ("TAU", metadata["tau"]),
-        ("Dataset", metadata["dataset"]),
-        ("Recorded final train accuracy", f"{spec.recorded_train_accuracy:.2f}%"),
-        ("Recorded best test accuracy", f"{recorded_accuracy:.2f}%"),
-        ("Checkpoint re-evaluated accuracy", f"{reevaluated_accuracy:.2f}%"),
-        ("Re-evaluated correct", f"{metadata['correct_count']}/{metadata['test_count']}"),
-        ("Epochs", metadata["epoch"]),
-        ("Precision", metadata["quantization"]),
-        ("Model implementation source", implementation_source_label(metadata["source"])),
+        ("資料集", metadata["dataset"]),
+        ("紀錄最終訓練準確率", f"{spec.recorded_train_accuracy:.2f}%"),
+        ("紀錄最佳測試準確率", f"{recorded_accuracy:.2f}%"),
+        ("權重重新評估準確率", f"{reevaluated_accuracy:.2f}%"),
+        ("重新評估答對數", f"{metadata['correct_count']}/{metadata['test_count']}"),
+        ("訓練週期", metadata["epoch"]),
+        ("數值精度", metadata["quantization"]),
+        ("模型程式來源", implementation_source_label(metadata["source"])),
     )
     st.dataframe(
         pd.DataFrame(
             [(field, str(value)) for field, value in metadata_rows],
-            columns=("Field", "Value"),
+            columns=("項目", "內容"),
         ),
         hide_index=True,
         width="stretch",
@@ -598,7 +598,7 @@ def render_model_info(metadata: dict, spec: ModelSpec) -> None:
 def render_history() -> None:
     st.markdown(
         section_header_html(
-            "SESSION LOG",
+            "執行紀錄",
             "本次推論執行紀錄",
             "記錄僅保存於目前瀏覽器 session，可下載 CSV，不寫入共用伺服器檔案。",
         ),

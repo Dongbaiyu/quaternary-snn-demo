@@ -80,7 +80,7 @@ class WebDemoSample:
 
     @property
     def display_name(self) -> str:
-        return f"Index {self.index} — {self.true_label} → {self.expected_prediction}"
+        return f"案例 {self.index} — {self.true_label} → {self.expected_prediction}"
 
 
 @dataclass(slots=True)
@@ -266,10 +266,8 @@ def hero_html(time_steps: int, tau: float, accuracy: float, device: str) -> str:
     return (
         '<section class="editorial-hero">'
         '<div class="hero-layout"><div class="hero-copy">'
-        '<div class="eyebrow">MODEL OVERVIEW</div>'
+        '<div class="eyebrow">系統總覽</div>'
         '<h1>四元脈衝神經網路<br><em>推論與視覺化系統</em></h1>'
-        '<p class="hero-deck">以 SResNet20 呈現多時間步推論、四元脈衝統計與 '
-        'CIFAR-10 分類結果的可追溯展示系統。</p>'
         '<div class="hero-tags">'
         f'<span>SResNet20</span><span>T={int(time_steps)}</span>'
         f'<span>TAU={float(tau):g}</span><span>{html.escape(device)} · FP32</span>'
@@ -280,13 +278,13 @@ def hero_html(time_steps: int, tau: float, accuracy: float, device: str) -> str:
         '<span class="signal-axis x"></span><span class="signal-axis y"></span>'
         '<b class="pulse p1">-1</b><b class="pulse p2">0</b>'
         '<b class="pulse p3">1</b><b class="pulse p4">2</b>'
-        '<div class="signal-core"><small>SPIKE VALUES</small><strong>{-1, 0, 1, 2}</strong></div>'
+        '<div class="signal-core"><small>脈衝值</small><strong>{-1, 0, 1, 2}</strong></div>'
         '</div>'
         '<div class="hero-facts">'
-        f'<div class="featured"><small>BEST TEST</small><strong>{accuracy:.2f}%</strong></div>'
-        '<div><small>DATASET</small><strong>CIFAR-10</strong></div>'
-        '<div><small>ARCHITECTURE</small><strong>RESNET-20</strong></div>'
-        '<div><small>OUTPUT</small><strong>10 CLASSES</strong></div>'
+        f'<div class="featured"><small>最佳測試準確率</small><strong>{accuracy:.2f}%</strong></div>'
+        '<div><small>資料集</small><strong>CIFAR-10</strong></div>'
+        '<div><small>模型架構</small><strong>SResNet20</strong></div>'
+        '<div><small>輸出類別</small><strong>10 類</strong></div>'
         '</div></div></div>'
         '</section>'
     )
@@ -324,15 +322,15 @@ def accuracy_strip_html(selected_time_steps: int) -> str:
         selected = " selected" if time_steps == int(selected_time_steps) else ""
         cards.append(
             f'<div class="accuracy-item{selected}"><span>T={time_steps}</span>'
-            f'<strong>{accuracy:.2f}%</strong><small>Best Test Accuracy</small></div>'
+            f'<strong>{accuracy:.2f}%</strong><small>最佳測試準確率</small></div>'
         )
     return '<div class="accuracy-strip">' + "".join(cards) + "</div>"
 
 
 def recorded_results_table_html() -> str:
     rows = [
-        ("Ternary Spikes (paper)", 6, None, 92.07, False),
-        ("Quaternary Spikes", 6, 99.84, 92.30, True),
+        ("三元脈衝（文獻）", 6, None, 92.07, False),
+        ("四元脈衝", 6, 99.84, 92.30, True),
         ("", 4, 99.84, 92.03, True),
         ("", 2, 99.57, 92.04, True),
         ("", 1, 98.96, 91.18, False),
@@ -351,8 +349,8 @@ def recorded_results_table_html() -> str:
         )
     return (
         '<div class="recorded-results-wrap"><table class="recorded-results">'
-        "<thead><tr><th></th><th>Timestep</th><th>Train accuracy</th>"
-        "<th>Test accuracy</th></tr></thead><tbody>"
+        "<thead><tr><th>模型</th><th>時間步</th><th>訓練準確率</th>"
+        "<th>測試準確率</th></tr></thead><tbody>"
         + "".join(body)
         + "</tbody></table></div>"
     )
@@ -361,12 +359,12 @@ def recorded_results_table_html() -> str:
 def pipeline_html() -> str:
     stages = (
         ("01", "CIFAR-10", "32×32 RGB"),
-        ("02", "Normalize", "No downsample"),
-        ("03", "Temporal Input", "Repeat for T steps"),
-        ("04", "SResNet20", "3 residual stages"),
-        ("05", "Quaternary LIF", "{-1, 0, 1, 2}"),
-        ("06", "Mean Logits", "FC 128→10"),
-        ("07", "Softmax", "Top-1 / Top-3"),
+        ("02", "正規化", "無降採樣"),
+        ("03", "時間步輸入", "重複輸入 T 次"),
+        ("04", "SResNet20", "三個殘差階段"),
+        ("05", "四元 LIF", "{-1, 0, 1, 2}"),
+        ("06", "平均輸出分數", "FC 128→10"),
+        ("07", "Softmax", "第一名／前三名"),
     )
     cards = []
     for number, title, detail in stages:
@@ -391,7 +389,7 @@ def probability_bars_html(scores: dict[str, float]) -> str:
             f'<div class="bar-value">{percentage:.2f}%</div>'
             "</div>"
         )
-    return '<div class="chart-title">Softmax Probability</div>' + "".join(rows)
+    return '<div class="chart-title">分類機率</div>' + "".join(rows)
 
 
 def spike_bars_html(counts: dict[int, int]) -> str:
@@ -403,7 +401,7 @@ def spike_bars_html(counts: dict[int, int]) -> str:
         percentage = 100.0 * count / total if total else 0.0
         rows.append(
             '<div class="bar-row">'
-            f'<div class="bar-name">Spike {value}</div>'
+            f'<div class="bar-name">脈衝 {value}</div>'
             '<div class="bar-track">'
             f'<div class="bar-fill {colors[value]}" style="width:{percentage:.4f}%"></div>'
             "</div>"
@@ -415,12 +413,8 @@ def spike_bars_html(counts: dict[int, int]) -> str:
     nonzero_rate = 100.0 - zero_rate if total else 0.0
     rates = (
         '<div class="rate-grid">'
-        f'<div><span>Zero Spike Rate</span><strong>{zero_rate:.2f}%</strong></div>'
-        f'<div><span>Non-zero Spike Rate</span><strong>{nonzero_rate:.2f}%</strong></div>'
+        f'<div><span>零脈衝比例</span><strong>{zero_rate:.2f}%</strong></div>'
+        f'<div><span>非零脈衝比例</span><strong>{nonzero_rate:.2f}%</strong></div>'
         "</div>"
     )
-    scope = (
-        '<div class="scope-note">統計範圍：單次 inference 的所有 Time-step '
-        "與所有 LIF 層累計</div>"
-    )
-    return '<div class="chart-title">Quaternary Spike Distribution</div>' + scope + "".join(rows) + rates
+    return '<div class="chart-title">四元脈衝分布</div>' + "".join(rows) + rates

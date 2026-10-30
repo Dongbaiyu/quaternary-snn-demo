@@ -83,8 +83,8 @@ def test_recorded_result_table_matches_user_provided_summary():
         assert value in table
     for value in ("98.96%", "99.57%", "99.84%"):
         assert value in table
-    assert "Ternary Spikes (paper)" in table
-    assert "Quaternary Spikes" in table
+    assert "三元脈衝（文獻）" in table
+    assert "四元脈衝" in table
 
 def test_metadata_source_is_implementation_not_inference_time_step():
     metadata = load_metadata()
@@ -251,9 +251,9 @@ def test_streamlit_overview_smoke_run():
     app.segmented_control[0].set_value("推論").run(timeout=120)
     assert not app.exception
     labels = {widget.label for widget in app.selectbox}
-    assert "Inference Time-step" in labels
+    assert "推論時間步" in labels
     assert any(
-        "Model implementation source:</strong> qua_v10.py" in item.value
+        "模型來源</strong><span>qua_v10.py" in item.value
         for item in app.markdown
     )
 
@@ -264,22 +264,22 @@ def test_streamlit_overview_smoke_run():
     }
     for selected_t, (accuracy, checkpoint, source, tau) in expected_models.items():
         time_step_select = next(
-            widget for widget in app.selectbox if widget.label == "Inference Time-step"
+            widget for widget in app.selectbox if widget.label == "推論時間步"
         )
         time_step_select.set_value(selected_t).run(timeout=120)
         assert not app.exception
         assert not app.warning
         assert any(
-            f"Best Test Accuracy：{accuracy}" in success.value
+            f"最佳測試準確率：{accuracy}" in success.value
             for success in app.success
         )
         info_html = "\n".join(item.value for item in app.markdown)
         assert checkpoint in info_html
         assert source in info_html
-        assert f"<strong>TAU:</strong> {tau}" in info_html
+        assert f"<strong>TAU／裝置</strong><span>{tau}／" in info_html
 
     time_step_select = next(
-        widget for widget in app.selectbox if widget.label == "Inference Time-step"
+        widget for widget in app.selectbox if widget.label == "推論時間步"
     )
     time_step_select.set_value(4).run(timeout=120)
     assert not app.exception
@@ -287,23 +287,21 @@ def test_streamlit_overview_smoke_run():
         "T=4-trained checkpoint" in warning.value for warning in app.warning
     )
     assert any(
-        "Best Test Accuracy：92.03%" in success.value for success in app.success
+        "最佳測試準確率：92.03%" in success.value for success in app.success
     )
-    assert any(
-        "此數值來自 all_time_step_results 原始訓練成果記錄的 Best Test Accuracy。" in caption.value
-        for caption in app.caption
-    )
+    assert not any("此數值來自 all_time_step_results" in caption.value for caption in app.caption)
 
     run_button = next(button for button in app.button if button.label == "開始推論")
     run_button.click().run(timeout=120)
     assert not app.exception
-    assert any("Top-1 Prediction" in item.value for item in app.markdown)
+    assert any("第一名預測" in item.value for item in app.markdown)
 
     time_step_select = next(
-        widget for widget in app.selectbox if widget.label == "Inference Time-step"
+        widget for widget in app.selectbox if widget.label == "推論時間步"
     )
     time_step_select.set_value(1).run(timeout=120)
-    assert not any("Top-1 Prediction" in item.value for item in app.markdown)
+    assert not any("第一名預測" in item.value for item in app.markdown)
+    assert any("result-panel-empty" in item.value for item in app.markdown)
 
 
 def test_public_streamlit_config_hides_developer_details():
