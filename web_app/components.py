@@ -80,7 +80,7 @@ class WebDemoSample:
 
     @property
     def display_name(self) -> str:
-        return f"案例 {self.index} — {self.true_label} → {self.expected_prediction}"
+        return f"案例 {self.index} — {self.true_label}"
 
 
 @dataclass(slots=True)

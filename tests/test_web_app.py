@@ -132,6 +132,7 @@ def test_ten_exported_samples_cover_every_cifar10_class(samples):
     assert {sample.true_label for sample in samples} == set(CIFAR10_CLASSES)
     for sample in samples:
         assert sample.image_path.is_file()
+        assert sample.display_name == f"案例 {sample.index} — {sample.true_label}"
         image = load_sample_image(sample)
         assert image.mode == "RGB"
         assert image.size == (32, 32)
